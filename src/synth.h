@@ -13,28 +13,39 @@
 
 typedef struct Oscillator {
   float phase;
-  float phase_stride;
+  float phaseStride;
 } Oscillator;
-
-typedef struct {
-  float frequency;
-  float sample_duration;
-  struct Oscillator o;
-} SynthWave;
 
 typedef enum WaveType {
   SINWAVE,
   SAWWAVE,
-  // TODO: More types
-
+  SQUAREWAVE,
+  TRIANGLEWAVE,
 } WaveType;
 
-// waves
-float sin_wav(Oscillator *o);
+typedef struct SynthWave {
+  // TODO: Figure out if i want to add a wavetype enum in this
+  float frequency;
+  // float sample_duration;
+  float *signal;
+  int signalSize;
+  struct Oscillator oscillator;
+} SynthWave;
 
-float saw_wav(Oscillator *o);
+SynthWave *initSynthWave(float frequency);
+
+void updateFrequency(SynthWave *wav, float frequency);
+
+void incrementFrequency(SynthWave *wav, float increment);
+
+// waves
+float sinWave(Oscillator *o);
+
+float sawWave(Oscillator *o);
+
+float squareWave(Oscillator *o);
+
 // update
-// TODO: This will become a sin wav
-void update_buffer(float *signal, int signalSize, Oscillator *o, WaveType wav);
+void updateSynthBuffer(SynthWave *sw, WaveType wav);
 
 #endif
